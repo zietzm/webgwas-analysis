@@ -1,0 +1,31 @@
+[project]
+name = "webgwas-analysis"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "jupyterlab>=4.2.5",
+    "polars>=1.6.0",
+    "pandas>=2.2.2",
+    "numpy>=2.1.0",
+    "matplotlib>=3.9.2",
+    "scikit-learn>=1.5.1",
+    "zstandard>=0.23.0",
+    "pyarrow>=17.0.0",
+    "webgwas",
+    "webgwas-backend",
+    "sqlmodel>=0.0.21",
+    "seaborn>=0.13.2",
+    "scipy>=1.14.1",
+    "tqdm>=4.66.5",
+    "ipywidgets>=8.1.5",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+webgwas = { git = "https://github.com/zietzm/webgwas.git" }
+webgwas-backend = { git = "https://github.com/tatonetti-lab/webgwas-backend" }
