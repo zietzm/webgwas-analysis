@@ -1,0 +1,4 @@
+[submodule "vendor/PhenotypeSimulator"]
+	path = vendor/PhenotypeSimulator
+	url = git@github.com:zietzm/PhenotypeSimulator.git
+	branch = format

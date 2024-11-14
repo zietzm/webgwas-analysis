@@ -1,4 +1,5 @@
-.ipynb_checkpoints
 .DS_Store
 __pycache__
-nb/fit-quality/data
+GH_TOKEN.txt
+data
+.ipynb_checkpoints
