@@ -3,3 +3,5 @@ __pycache__
 GH_TOKEN.txt
 data
 .ipynb_checkpoints
+analysis/*/outdated
+analysis/*/debug

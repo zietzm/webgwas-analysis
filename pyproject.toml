@@ -19,7 +19,5 @@ dependencies = [
     "seaborn>=0.13.2",
     "statsmodels>=0.14.4",
     "tqdm>=4.67.0",
-    "pyreadr>=0.5.2",
-    "rpy2>=3.5.16",
     "sqlmodel>=0.0.22",
 ]
