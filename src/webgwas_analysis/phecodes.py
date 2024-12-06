@@ -251,7 +251,7 @@ def apply_definitions(
             col = included
         else:
             excluded = pl.max_horizontal(definition.exclude_icd).eq(1)
-            col = pl.when(included & excluded).then(None).otherwise(included)
+            col = pl.when(excluded).then(None).otherwise(included)
 
         col = col.cast(pl.Int8).alias(definition.phecode)
         col_definitions.append(col)
@@ -280,9 +280,8 @@ def apply_definitions_fuzzy(
         if len(definition.exclude_icd) == 0:
             col = included
         else:
-            excluded = pl.max_horizontal(definition.exclude_icd)
-            not_excluded = pl.lit(1).sub(excluded)
-            col = pl.min_horizontal([included, not_excluded])
+            excluded = pl.max_horizontal(definition.exclude_icd).ge(0.5)
+            col = pl.when(excluded).then(None).otherwise(included)
 
         col = col.alias(definition.phecode)
         col_definitions.append(col)
