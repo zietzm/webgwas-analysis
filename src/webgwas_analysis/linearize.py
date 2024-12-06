@@ -3,28 +3,6 @@ import tqdm.auto as tqdm
 from sklearn.linear_model import LinearRegression
 
 
-def _approximate(
-    df: pl.DataFrame,
-    endog: str | list[str],
-    exogs: list[str],
-    eval_df: pl.DataFrame | None = None,
-) -> pl.DataFrame:
-    X_df = df.select(exogs).to_pandas()
-    Y_df = df.select(endog).to_pandas()
-    reg = LinearRegression(fit_intercept=True, n_jobs=-1)
-    reg.fit(X_df, Y_df)
-    if eval_df is None:
-        eval_df = df
-    else:
-        missing_columns = set(exogs).difference(eval_df.columns)
-        if len(missing_columns) > 0:
-            raise ValueError(f"Missing columns in eval_df: {missing_columns}")
-
-    Yhat = reg.predict(eval_df.select(exogs).to_pandas())
-    schema = [endog] if isinstance(endog, str) else endog
-    return pl.DataFrame(Yhat, schema=schema)
-
-
 def approximate_all(
     df: pl.DataFrame,
     endogs: list[str],
@@ -78,3 +56,25 @@ def approximate_all_with_missingness(
         approx_df[endog] = Yhat_df[endog]
 
     return pl.DataFrame(approx_df)
+
+
+def _approximate(
+    df: pl.DataFrame,
+    endog: str | list[str],
+    exogs: list[str],
+    eval_df: pl.DataFrame | None = None,
+) -> pl.DataFrame:
+    X_df = df.select(exogs).to_pandas()
+    Y_df = df.select(endog).to_pandas()
+    reg = LinearRegression(fit_intercept=True, n_jobs=-1)
+    reg.fit(X_df, Y_df)
+    if eval_df is None:
+        eval_df = df
+    else:
+        missing_columns = set(exogs).difference(eval_df.columns)
+        if len(missing_columns) > 0:
+            raise ValueError(f"Missing columns in eval_df: {missing_columns}")
+
+    Yhat = reg.predict(eval_df.select(exogs).to_pandas())
+    schema = [endog] if isinstance(endog, str) else endog
+    return pl.DataFrame(Yhat, schema=schema)
