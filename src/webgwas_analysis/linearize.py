@@ -16,8 +16,9 @@ def _approximate(
     if eval_df is None:
         eval_df = df
     else:
-        if not eval_df.columns == df.columns:
-            raise ValueError("df and eval_df must have the same columns")
+        missing_columns = set(exogs).difference(eval_df.columns)
+        if len(missing_columns) > 0:
+            raise ValueError(f"Missing columns in eval_df: {missing_columns}")
 
     Yhat = reg.predict(eval_df.select(exogs).to_pandas())
     schema = [endog] if isinstance(endog, str) else endog
@@ -32,8 +33,10 @@ def approximate_all(
 ) -> pl.DataFrame:
     """Approximate all phenotypes in the dataframe using linear regression."""
 
-    if eval_df is not None and not df.columns == eval_df.columns:
-        raise ValueError("df and eval_df must have the same columns")
+    if eval_df is not None:
+        missing_columns = set(exogs).difference(eval_df.columns)
+        if len(missing_columns) > 0:
+            raise ValueError(f"Missing columns in eval_df: {missing_columns}")
 
     # Check for missingness
     phenotypes_with_missingness = (
@@ -59,8 +62,10 @@ def approximate_all_with_missingness(
     missingness is present. Note, this is considerably slower than `approximate_all`.
     """
 
-    if eval_df is not None and not df.columns == eval_df.columns:
-        raise ValueError("df and eval_df must have the same columns")
+    if eval_df is not None:
+        missing_columns = set(exogs).difference(eval_df.columns)
+        if len(missing_columns) > 0:
+            raise ValueError(f"Missing columns in eval_df: {missing_columns}")
 
     approx_df = dict()
     for endog in tqdm.tqdm(endogs):
