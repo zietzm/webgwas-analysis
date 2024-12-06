@@ -5,3 +5,4 @@ data
 .ipynb_checkpoints
 analysis/*/outdated
 analysis/*/debug
+old/
