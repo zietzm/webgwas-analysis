@@ -62,7 +62,10 @@ def approximate_all_with_missingness(
     missingness is present. Note, this is considerably slower than `approximate_all`.
     """
 
-    if eval_df is not None:
+    if eval_df is None:
+        eval_df = df
+    else:
+        # Check that eval_df has a column for every exog
         missing_columns = set(exogs).difference(eval_df.columns)
         if len(missing_columns) > 0:
             raise ValueError(f"Missing columns in eval_df: {missing_columns}")
