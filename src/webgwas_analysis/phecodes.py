@@ -141,9 +141,11 @@ def load_definitions(
 def filter_definitions(
     definitions: list[PhecodeDefinition],
     icd_codes: set[str],
+    remove_trivial: bool = True,
 ) -> list[PhecodeDefinition]:
     """Update phecode definitions to only include ICD codes that are in the
-    given set. Remove trivial definitions that are just a single ICD code.
+    given set. Remove definitions without an inclusion code and trivial
+    definitions that are just a single ICD code.
     """
 
     results = list()
@@ -157,10 +159,13 @@ def filter_definitions(
 
         # Conditions for excluding a definition
         no_inclusion = len(updated_inclusion) == 0
-        trivial = len(updated_inclusion) == 1 and len(updated_exclusion) == 0
-
-        if no_inclusion or trivial:
+        if no_inclusion:
             continue
+
+        if remove_trivial:
+            trivial = len(updated_inclusion) == 1 and len(updated_exclusion) == 0
+            if trivial:
+                continue
 
         result = PhecodeDefinition(
             phecode=definition.phecode,
